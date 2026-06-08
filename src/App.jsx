@@ -446,7 +446,9 @@ function App() {
   const [joinTarget, setJoinTarget] = useState(null);
   const [chatGroupId, setChatGroupId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [sendingMessage, setSendingMessage] = useState(false);
   const socketRef = useRef(null);
+  const sendingMessageRef = useRef(false);
 
   const persist = (updater) => {
     setState((current) => {
@@ -629,13 +631,19 @@ function App() {
     event.preventDefault();
     const input = event.currentTarget.elements.message;
     const text = input.value.trim();
-    if (!text || !activeChat) return;
+    if (!text || !activeChat || sendingMessageRef.current) return;
+    sendingMessageRef.current = true;
+    setSendingMessage(true);
+    input.value = '';
     try {
       const nextState = await api.sendMessage(auth.token, activeChat.id, text);
       setRemoteState(nextState);
-      input.value = '';
     } catch (error) {
+      if (!input.value) input.value = text;
       showToast(error.message);
+    } finally {
+      sendingMessageRef.current = false;
+      setSendingMessage(false);
     }
   };
   const saveProfile = async (event) => {
@@ -678,7 +686,7 @@ function App() {
         )}
         {view === 'requests' && <Requests state={state} answerJoinRequest={answerJoinRequest} />}
         {view === 'chat' && (
-          <Chat groups={myGroups} activeChat={activeChat} chatGroupId={chatGroupId} setChatGroupId={setChatGroupId} sendMessage={sendMessage} />
+          <Chat groups={myGroups} activeChat={activeChat} chatGroupId={chatGroupId} setChatGroupId={setChatGroupId} sendMessage={sendMessage} sendingMessage={sendingMessage} />
         )}
         {view === 'notifications' && <Notifications state={state} auth={auth} setRemoteState={setRemoteState} showToast={showToast} answerJoinRequest={answerJoinRequest} />}
         {view === 'profile' && <Profile user={state.user} saveProfile={saveProfile} />}
@@ -1110,7 +1118,7 @@ function Requests({ state, answerJoinRequest }) {
   );
 }
 
-function Chat({ groups, activeChat, chatGroupId, setChatGroupId, sendMessage }) {
+function Chat({ groups, activeChat, chatGroupId, setChatGroupId, sendMessage, sendingMessage }) {
   return (
     <section className="view active">
       <Header title="Chat de grupos" sub="Mensajeria en tiempo real con tus companeros" />
@@ -1123,7 +1131,7 @@ function Chat({ groups, activeChat, chatGroupId, setChatGroupId, sendMessage }) 
           <div className="chat-msgs">
             {activeChat?.msgs.length ? activeChat.msgs.map((msg, index) => <div className={`msg-group ${msg.uid === 1 ? 'mine' : 'other'}`} key={`${msg.t}-${index}`}>{msg.uid !== 1 && <div className="msg-sender">{msg.name}</div>}<div className="msg-bubble">{msg.text}</div></div>) : <Empty icon="💬" text="Se el primero en escribir algo" />}
           </div>
-          <form className="chat-compose" onSubmit={sendMessage}><input className="chat-input" name="message" placeholder="Escribe un mensaje..." disabled={!activeChat} /><button className="chat-send" disabled={!activeChat}>➤</button></form>
+          <form className="chat-compose" onSubmit={sendMessage}><input className="chat-input" name="message" placeholder={sendingMessage ? 'Enviando...' : 'Escribe un mensaje...'} disabled={!activeChat || sendingMessage} autoComplete="off" /><button className="chat-send" disabled={!activeChat || sendingMessage}>➤</button></form>
         </div>
       </div>
     </section>
@@ -1227,4 +1235,3 @@ function Select({ label, name, options, defaultValue }) {
 }
 
 export default App;
-
