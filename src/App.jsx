@@ -4,11 +4,6 @@ import { createSocket } from './socket.js';
 
 const STORAGE_KEY = 'studyconnect_react_state';
 const AUTH_KEY = 'studyconnect_auth_session';
-const DEMO_USER = {
-  email: 'keenscy@test.com',
-  password: 'password123',
-  name: 'Keenscy Sanchez',
-};
 
 const initialState = {
   user: {
@@ -515,7 +510,7 @@ function App() {
       showToast('Sesion iniciada correctamente');
       return { ok: true };
     } catch (error) {
-      return { ok: false, message: `${error.message} Usa keenscy@test.com / password123` };
+      return { ok: false, message: error.message };
     } finally {
       setLoading(false);
     }
@@ -753,27 +748,26 @@ function LoginPage({ login, register, loading }) {
           </div>
 
           {mode === 'login' ? (
-            <form className="auth-form" onSubmit={submitLogin}>
+            <form className="auth-form" onSubmit={submitLogin} autoComplete="off">
               <div>
                 <h2>Bienvenido de nuevo</h2>
-                <p>Usa la cuenta demo para entrar al prototipo.</p>
+                <p>Ingresa con la cuenta que registraste en StudyConnect.</p>
               </div>
-              <Field label="Correo" name="email" type="email" defaultValue={DEMO_USER.email} />
-              <Field label="Contrasena" name="password" type="password" defaultValue={DEMO_USER.password} />
+              <Field label="Correo" name="email" type="email" placeholder="correo@universidad.edu" autoComplete="off" />
+              <Field label="Contrasena" name="password" type="password" placeholder="Tu contrasena" autoComplete="new-password" />
               {error && <div className="auth-error">{error}</div>}
               <button className="btn btn-primary btn-full" disabled={loading}>{loading ? 'Conectando...' : 'Iniciar sesion'}</button>
-              <div className="auth-hint">Demo: {DEMO_USER.email} / {DEMO_USER.password}</div>
             </form>
           ) : (
-            <form className="auth-form" onSubmit={submitRegister}>
+            <form className="auth-form" onSubmit={submitRegister} autoComplete="off">
               <div>
                 <h2>Crear cuenta</h2>
-                <p>Registro local para probar el flujo de usuario.</p>
+                <p>Crea tu perfil para comenzar a estudiar en equipo.</p>
               </div>
-              <Field label="Nombre completo" name="name" placeholder="Tu nombre" />
-              <Field label="Correo" name="email" type="email" placeholder="correo@universidad.edu" />
-              <Field label="Carrera" name="career" placeholder="Ej: Ingenieria de Sistemas" />
-              <Field label="Contrasena" name="password" type="password" placeholder="Minimo 6 caracteres" />
+              <Field label="Nombre completo" name="name" placeholder="Tu nombre" autoComplete="name" />
+              <Field label="Correo" name="email" type="email" placeholder="correo@universidad.edu" autoComplete="email" />
+              <Field label="Carrera" name="career" placeholder="Ej: Ingenieria de Sistemas" autoComplete="organization-title" />
+              <Field label="Contrasena" name="password" type="password" placeholder="Minimo 6 caracteres" autoComplete="new-password" />
               {error && <div className="auth-error">{error}</div>}
               <button className="btn btn-primary btn-full" disabled={loading}>{loading ? 'Creando...' : 'Crear cuenta'}</button>
             </form>
