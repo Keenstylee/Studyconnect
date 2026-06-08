@@ -788,17 +788,27 @@ a { text-decoration: none; color: inherit; }
 .tag.green  { background: var(--green-bg);  color: var(--green);   border-color: rgba(62,207,142,0.2); }
 
 /* ── CHAT ── */
-.chat-layout { display: flex; gap: 14px; flex: 1; overflow: hidden; min-height: 0; }
-.chat-sidebar { width: 220px; flex-shrink: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.chat-layout { display: flex; gap: 14px; flex: 1; overflow: hidden; min-height: 0; min-width: 0; }
+.chat-sidebar {
+  width: 230px;
+  flex: 0 0 230px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 2px;
+}
 .chat-item {
   background: var(--bg2); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 12px 14px;
   width: 100%; text-align: left;
-  cursor: pointer; transition: transform var(--transition), border-color var(--transition), background var(--transition);
+  min-width: 0;
+  cursor: pointer; transition: transform var(--transition), border-color var(--transition), background var(--transition), box-shadow var(--transition);
 }
-.chat-item:hover { border-color: var(--border2); transform: translateX(4px); }
-.chat-item.active { border-color: var(--accent); background: var(--accent-bg); }
-.chat-item-name   { font-size: 12px; font-weight: 500; color: var(--text); }
+.chat-item:hover { border-color: var(--border2); transform: translateX(2px); }
+.chat-item.active { border-color: var(--accent); background: var(--accent-bg); box-shadow: inset 3px 0 0 var(--accent); }
+.chat-item-name   { font-size: 12px; font-weight: 500; color: var(--text); white-space: normal; overflow-wrap: anywhere; }
 .chat-item-course { font-size: 10px; color: var(--text3); margin-top: 2px; }
 .chat-item-preview{ font-size: 10px; color: var(--text3); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
@@ -806,6 +816,7 @@ a { text-decoration: none; color: inherit; }
   flex: 1; background: var(--bg2); border: 1px solid var(--border);
   border-radius: var(--radius); display: flex; flex-direction: column; overflow: hidden;
   min-height: 0;
+  min-width: 0;
 }
 .chat-header {
   padding: 14px 18px; border-bottom: 1px solid var(--border);
@@ -1239,9 +1250,11 @@ a { text-decoration: none; color: inherit; }
 
   .chat-sidebar {
     width: 100%;
+    flex: 0 0 auto;
     flex-direction: row;
     overflow-x: auto;
     overflow-y: hidden;
+    padding-right: 0;
     padding-bottom: 4px;
   }
 
