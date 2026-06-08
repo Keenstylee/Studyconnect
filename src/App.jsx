@@ -565,6 +565,11 @@ function App() {
     if (nextView === 'chat' && !chatGroupId && myGroups.length) setChatGroupId(myGroups[0].id);
   };
 
+  const openGroupChat = (groupId) => {
+    setChatGroupId(groupId);
+    setView('chat');
+  };
+
   const joinGroup = async (message = '') => {
     if (!joinTarget) return;
     try {
@@ -667,10 +672,10 @@ function App() {
       <Sidebar state={state} view={view} go={go} unread={unread} logout={logout} />
       <main className="main">
         {view === 'dashboard' && (
-          <Dashboard state={state} memberCount={memberCount} isJoined={isJoined} isOwner={isOwner} isRequested={isRequested} setJoinTarget={setJoinTarget} go={go} />
+          <Dashboard state={state} memberCount={memberCount} isJoined={isJoined} isOwner={isOwner} isRequested={isRequested} setJoinTarget={setJoinTarget} openGroupChat={openGroupChat} go={go} />
         )}
         {view === 'groups' && (
-          <Groups state={state} memberCount={memberCount} isJoined={isJoined} isOwner={isOwner} isRequested={isRequested} setJoinTarget={setJoinTarget} leaveGroup={leaveGroup} />
+          <Groups state={state} memberCount={memberCount} isJoined={isJoined} isOwner={isOwner} isRequested={isRequested} setJoinTarget={setJoinTarget} leaveGroup={leaveGroup} openGroupChat={openGroupChat} />
         )}
         {view === 'create' && <CreateGroup createGroup={createGroup} />}
         {view === 'matching' && (
@@ -845,85 +850,78 @@ function Sidebar({ state, view, go, unread, logout }) {
   );
 }
 
-function Dashboard({ state, memberCount, isJoined, isOwner, isRequested, setJoinTarget, go }) {
+function Dashboard({ state, memberCount, isJoined, isOwner, isRequested, setJoinTarget, openGroupChat, go }) {
   const recs = state.groups.filter((group) => state.user.courses.includes(group.course) && !isJoined(group.id) && !isOwner(group.id)).slice(0, 4);
   return (
-    <section className="view active">
+    <section className="view active dashboard-view">
       <div className="dashboard-hero">
         <div className="hero-copy">
-          <span className="hero-kicker">Sesion de estudio activa</span>
-          <h1>Bienvenido, <span>{state.user.name.split(' ')[0]}</span></h1>
-          <p>Encuentra grupos compatibles, conversa con tus companeros y organiza mejor tus cursos de la semana.</p>
+          <span className="hero-kicker">Panel academico</span>
+          <h1>Hola, <span>{state.user.name.split(' ')[0]}</span></h1>
+          <p>Gestiona tus grupos, revisa sugerencias y vuelve rapido a las conversaciones que importan.</p>
           <div className="hero-actions">
             <button className="btn btn-primary" onClick={() => go('matching')}>Ver sugerencias</button>
             <button className="btn btn-secondary" onClick={() => go('create')}>Crear grupo</button>
           </div>
         </div>
-        <img className="hero-image" src="/assets/study-hero.png" alt="Estudiantes conectados en StudyConnect" />
+        <div className="hero-media">
+          <img className="hero-image" src="/assets/study-hero.png" alt="Estudiantes conectados en StudyConnect" />
+          <div className="session-popup">
+            <span className="activity-dot" />
+            <div>
+              <strong>Hoy 7:00 PM</strong>
+              <p>Calculo II - practica guiada</p>
+            </div>
+          </div>
+        </div>
       </div>
       <div className="stats-grid">
         <Stat label="Grupos unidos" value={state.joined.length} sub="grupos activos" />
         <Stat label="Grupos creados" value={state.created.length} sub="como dueno" />
         <Stat label="Mensajes enviados" value={state.msgcount} sub="en todos los chats" />
       </div>
-      <div className="spotlight-grid">
-        <article className="spotlight-card">
-          <span className="spotlight-icon">⚡</span>
+      <div className="dashboard-insights">
+        <article className="insight-card">
+          <span className="insight-icon">01</span>
           <div>
             <strong>Matching inteligente</strong>
             <p>Prioriza cursos en comun y cupos disponibles.</p>
           </div>
         </article>
-        <article className="spotlight-card">
-          <span className="spotlight-icon">🧭­</span>
+        <article className="insight-card">
+          <span className="insight-icon">02</span>
           <div>
             <strong>Ruta de estudio</strong>
             <p>Organiza tus grupos por curso, modalidad y horario.</p>
           </div>
         </article>
-        <article className="spotlight-card">
-          <span className="spotlight-icon">💬</span>
-          <div>
-            <strong>Chat de equipo</strong>
-            <p>Mantiene la conversacion de cada grupo en un solo lugar.</p>
-          </div>
-        </article>
-      </div>
-      <div className="activity-strip">
-        <div className="activity-card active-now">
-          <span className="activity-dot" />
-          <div>
-            <strong>Hoy 7:00 PM</strong>
-            <p>Calculo II - practica guiada</p>
-          </div>
-        </div>
-        <div className="activity-card">
-          <span className="activity-badge">SQL</span>
+        <article className="insight-card">
+          <span className="insight-icon">SQL</span>
           <div>
             <strong>Base de Datos</strong>
-            <p>Revision de modelo relacional</p>
+            <p>Revision de modelo relacional.</p>
           </div>
-        </div>
-        <div className="activity-card">
-          <span className="activity-badge">85%</span>
+        </article>
+        <article className="insight-card insight-card-strong">
+          <span className="insight-icon">85%</span>
           <div>
             <strong>Compatibilidad alta</strong>
             <p>3 grupos recomendados para ti</p>
           </div>
-        </div>
+        </article>
       </div>
       <div className="section-header">
         <span className="section-title">Grupos recomendados</span>
         <button className="section-link" onClick={() => go('matching')}>Ver todos →</button>
       </div>
       <div className="cards-grid">
-        {recs.length ? recs.map((group) => <GroupCard key={group.id} group={group} memberCount={memberCount} requested={isRequested(group.id)} setJoinTarget={setJoinTarget} />) : <Empty icon="🔍" text="Agrega cursos en tu perfil para ver sugerencias" />}
+        {recs.length ? recs.map((group) => <GroupCard key={group.id} group={group} memberCount={memberCount} joined={isJoined(group.id)} owner={isOwner(group.id)} requested={isRequested(group.id)} setJoinTarget={setJoinTarget} openGroupChat={openGroupChat} />) : <Empty icon="🔍" text="Agrega cursos en tu perfil para ver sugerencias" />}
       </div>
     </section>
   );
 }
 
-function Groups({ state, memberCount, isJoined, isOwner, isRequested, setJoinTarget, leaveGroup }) {
+function Groups({ state, memberCount, isJoined, isOwner, isRequested, setJoinTarget, leaveGroup, openGroupChat }) {
   const [query, setQuery] = useState('');
   const [course, setCourse] = useState('');
   const [status, setStatus] = useState('');
@@ -944,18 +942,37 @@ function Groups({ state, memberCount, isJoined, isOwner, isRequested, setJoinTar
         <select className="form-select" value={status} onChange={(e) => setStatus(e.target.value)}><option value="">Todos</option><option value="open">Con espacio</option><option value="joined">Unidos</option></select>
       </div>
       <div className="cards-grid">
-        {filtered.length ? filtered.map((group) => <GroupCard key={group.id} group={group} memberCount={memberCount} joined={isJoined(group.id)} owner={isOwner(group.id)} requested={isRequested(group.id)} setJoinTarget={setJoinTarget} leaveGroup={leaveGroup} />) : <Empty icon="🔍" text="Sin resultados para tu busqueda" />}
+        {filtered.length ? filtered.map((group) => <GroupCard key={group.id} group={group} memberCount={memberCount} joined={isJoined(group.id)} owner={isOwner(group.id)} requested={isRequested(group.id)} setJoinTarget={setJoinTarget} leaveGroup={leaveGroup} openGroupChat={openGroupChat} />) : <Empty icon="🔍" text="Sin resultados para tu busqueda" />}
       </div>
     </section>
   );
 }
 
-function GroupCard({ group, memberCount, joined, owner, requested, setJoinTarget, leaveGroup }) {
+function GroupCard({ group, memberCount, joined, owner, requested, setJoinTarget, leaveGroup, openGroupChat }) {
   const cnt = memberCount(group);
   const color = courseColor(group.course);
   const full = cnt >= group.max;
+  const canOpenChat = owner || joined;
+  const handleCardClick = () => {
+    if (canOpenChat) openGroupChat(group.id);
+  };
+  const handleLeave = (event) => {
+    event.stopPropagation();
+    leaveGroup(group.id);
+  };
   return (
-    <article className="group-card">
+    <article
+      className={`group-card ${canOpenChat ? 'group-card-chat' : ''}`}
+      onClick={handleCardClick}
+      role={canOpenChat ? 'button' : undefined}
+      tabIndex={canOpenChat ? 0 : undefined}
+      onKeyDown={(event) => {
+        if (canOpenChat && (event.key === 'Enter' || event.key === ' ')) {
+          event.preventDefault();
+          handleCardClick();
+        }
+      }}
+    >
       <div className="group-image-wrap">
         <img
           className="group-image"
@@ -975,7 +992,7 @@ function GroupCard({ group, memberCount, joined, owner, requested, setJoinTarget
       <div className="card-meta">👥 {cnt}/{group.max} integrantes</div>
       <div className="progress-bar"><div className="progress-fill" style={{ width: `${Math.round((cnt / group.max) * 100)}%`, background: color }} /></div>
       {owner && <button className="btn btn-success btn-sm btn-full">Tu grupo</button>}
-      {joined && <button className="btn btn-success btn-sm btn-full" onClick={() => leaveGroup(group.id)}>✓ Unido - Salir</button>}
+      {joined && <button className="btn btn-success btn-sm btn-full" onClick={handleLeave}>✓ Unido - Salir</button>}
       {requested && !owner && !joined && <button className="btn btn-secondary btn-sm btn-full" disabled>Solicitud enviada</button>}
       {!owner && !joined && full && <button className="btn btn-secondary btn-sm btn-full" disabled>Grupo lleno</button>}
       {!owner && !joined && !requested && !full && <button className="btn btn-secondary btn-sm btn-full" onClick={() => setJoinTarget(group)}>Solicitar unirse</button>}
