@@ -10,14 +10,43 @@ async function request(path, options = {}) {
   return data;
 }
 
+function authorized(token, options = {}) {
+  return {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ...(options.headers || {}),
+    },
+  };
+}
+
 export const api = {
   login: (payload) => request('/auth/login', { method: 'POST', body: JSON.stringify(payload) }),
   register: (payload) => request('/auth/register', { method: 'POST', body: JSON.stringify(payload) }),
-  state: (userId) => request(`/state/${userId}`),
-  createGroup: (userId, group) => request('/groups', { method: 'POST', body: JSON.stringify({ userId, group }) }),
-  joinGroup: (userId, groupId) => request(`/groups/${groupId}/join`, { method: 'POST', body: JSON.stringify({ userId }) }),
-  leaveGroup: (userId, groupId) => request(`/groups/${groupId}/leave`, { method: 'DELETE', body: JSON.stringify({ userId }) }),
-  sendMessage: (userId, groupId, content) => request('/messages', { method: 'POST', body: JSON.stringify({ userId, groupId, content }) }),
-  saveProfile: (userId, profile) => request('/profile', { method: 'PUT', body: JSON.stringify({ userId, profile }) }),
-  markNotificationsRead: (userId) => request('/notifications/read', { method: 'PUT', body: JSON.stringify({ userId }) }),
+  state: (token) => request('/state', authorized(token)),
+  createGroup: (token, group) => request('/groups', authorized(token, {
+    method: 'POST',
+    body: JSON.stringify({ group }),
+  })),
+  joinGroup: (token, groupId, message = '') => request(`/groups/${groupId}/join`, authorized(token, {
+    method: 'POST',
+    body: JSON.stringify({ message }),
+  })),
+  answerJoinRequest: (token, requestId, action) => request(`/join-requests/${requestId}/${action}`, authorized(token, {
+    method: 'PUT',
+  })),
+  leaveGroup: (token, groupId) => request(`/groups/${groupId}/leave`, authorized(token, {
+    method: 'DELETE',
+  })),
+  sendMessage: (token, groupId, content) => request('/messages', authorized(token, {
+    method: 'POST',
+    body: JSON.stringify({ groupId, content }),
+  })),
+  saveProfile: (token, profile) => request('/profile', authorized(token, {
+    method: 'PUT',
+    body: JSON.stringify({ profile }),
+  })),
+  markNotificationsRead: (token) => request('/notifications/read', authorized(token, {
+    method: 'PUT',
+  })),
 };
