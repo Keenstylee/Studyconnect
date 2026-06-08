@@ -1,57 +1,130 @@
 # StudyConnect
 
-StudyConnect es una plataforma web de estudio colaborativo para estudiantes universitarios. Permite explorar grupos por curso, recibir sugerencias de compatibilidad y organizar sesiones de estudio.
+StudyConnect es una aplicacion web para conectar estudiantes universitarios en grupos de estudio compatibles por curso, ciclo y disponibilidad.
 
-## Estado del proyecto
+## Stack actual
 
-Actualmente el repositorio contiene un prototipo funcional del frontend desarrollado con React.  
-La conexión con backend, PostgreSQL y chat en tiempo real forma parte de la siguiente etapa.
+- React 18
+- Vite 5
+- CSS modular por archivo
+- LocalStorage para persistencia del prototipo
+- PostgreSQL como modelo de base de datos propuesto en `schema.sql`
 
-## Funcionalidades implementadas
+## Instalacion
 
-- Inicio de sesión y registro en modo demostración.
-- Dashboard con estadísticas y grupos recomendados.
-- Exploración de grupos de estudio.
-- Datos de prueba para matching y sugerencias.
-- Imágenes relacionadas con cada curso.
-- Diseño responsive para PC y dispositivos móviles.
-- Menú hamburguesa en pantallas pequeñas.
-- Efectos CSS3: hover, transiciones, transformaciones y animaciones.
-- Persistencia temporal mediante LocalStorage.
+```bash
+npm install
+npm run dev
+```
 
-## Tecnologías actuales
+## Scripts
 
-| Tecnología | Uso |
-| --- | --- |
-| React 18 | Componentes reutilizables e interfaz de usuario |
-| React DOM | Renderizado de React en el navegador |
-| Vite | Servidor de desarrollo y build optimizado |
-| @vitejs/plugin-react | Soporte para JSX y React dentro de Vite |
-| CSS3 | Diseño responsive, animaciones y efectos visuales |
-| LocalStorage | Persistencia temporal del prototipo |
+```bash
+npm run dev      # Frontend + backend
+npm run client   # Solo frontend Vite
+npm run server   # Solo API Express
+npm run build    # Compilacion de produccion
+npm run preview  # Vista previa del build
+```
 
-## Tecnologías planificadas
+## Backend/API
 
-| Tecnología | Uso futuro |
-| --- | --- |
-| Node.js + Express | API REST |
-| PostgreSQL + pg | Base de datos relacional |
-| Redis | Caché, sesiones y presencia en tiempo real |
-| Socket.io | Chat y notificaciones |
-| JWT + bcryptjs | Autenticación segura |
-| Axios | Comunicación entre frontend y API |
-| React Router DOM | Navegación entre páginas |
+El proyecto ahora incluye una API en `server/index.js` con Express y PostgreSQL.
 
-## Estructura del proyecto
+La documentacion tecnica completa esta en:
+
+```text
+docs/arquitectura.md
+```
+
+Antes de ejecutar, crea un archivo `.env` tomando como base `.env.example`:
+
+```env
+PORT=4000
+DATABASE_URL=postgres://postgres:TU_PASSWORD@localhost:5432/studyconnect
+JWT_SECRET=cambia_este_secreto_en_desarrollo
+```
+
+Luego inicia la app completa:
+
+```bash
+npm run dev
+```
+
+La API queda disponible en:
+
+```text
+http://localhost:4000/api
+```
+
+## Migraciones
+
+Las migraciones SQL viven en:
+
+```text
+server/migrations/
+```
+
+La migracion `001_add_profile_group_fields.sql` agrega campos que la interfaz utiliza:
+
+```text
+users.availability
+study_groups.modality
+study_groups.university
+study_groups.image_url
+```
+
+## Arquitectura del backend
+
+```text
+server/
+  index.js                    # Arranque de Express y montaje de rutas
+  db.js                       # Conexion a PostgreSQL
+  middleware/
+    auth.js                   # JWT y proteccion de endpoints
+  routes/
+    auth.routes.js            # Login y registro
+    state.routes.js           # Estado inicial de la app
+    groups.routes.js          # Crear grupos, solicitar unirse y salir
+    joinRequests.routes.js    # Aceptar o rechazar solicitudes
+    messages.routes.js        # Mensajes de chat
+    profile.routes.js         # Edicion de perfil
+    notifications.routes.js   # Notificaciones
+  services/
+    appState.js               # Construye el estado que consume React
+  utils/
+    asyncHandler.js           # Manejo de errores async
+    formatters.js             # Utilidades de formato
+    validation.js             # Validaciones de reglas de negocio
+```
+
+## Reglas validadas por backend
+
+```text
+- Autenticacion: email valido y contrasena minima.
+- Perfil: nombre obligatorio y ciclo academico valido.
+- Grupos: nombre/curso obligatorios, modalidad valida y 2-50 integrantes.
+- Solicitudes: evita duplicados pendientes, grupos llenos y solicitudes del dueno.
+- Chat: solo miembros o duenos pueden enviar mensajes.
+```
+
+La interfaz incluye una vista de solicitudes para revisar solicitudes enviadas y responder solicitudes recibidas.
+
+El chat usa Socket.IO para recibir mensajes nuevos en tiempo real.
+
+## Estructura
 
 ```text
 Studyconnect/
-├── public/
-│   └── assets/          # Imágenes utilizadas por la interfaz
-├── src/
-│   ├── App.jsx          # Componentes y lógica principal
-│   ├── main.jsx         # Punto de montaje de React
-│   └── styles.css       # Diseño, responsive y animaciones
-├── index.html           # Entrada requerida por Vite
-├── schema.sql           # Modelo relacional planificado
-└── package.json         # Dependencias y scripts
+├── index.html
+├── package.json
+├── schema.sql
+└── src/
+    ├── App.jsx
+    ├── main.jsx
+    └── styles.css
+```
+
+## Nota
+
+Esta version ya usa React para componentes, estado y renderizado. La conexion real con backend/API queda como siguiente fase del proyecto.
