@@ -678,7 +678,7 @@ function App() {
         )}
         {view === 'requests' && <Requests state={state} answerJoinRequest={answerJoinRequest} />}
         {view === 'chat' && (
-          <Chat groups={myGroups} activeChat={activeChat} chatGroupId={chatGroupId} setChatGroupId={setChatGroupId} sendMessage={sendMessage} />
+          <Chat groups={myGroups} activeChat={activeChat} chatGroupId={chatGroupId} setChatGroupId={setChatGroupId} sendMessage={sendMessage} currentUser={auth} />
         )}
         {view === 'notifications' && <Notifications state={state} auth={auth} setRemoteState={setRemoteState} showToast={showToast} answerJoinRequest={answerJoinRequest} />}
         {view === 'profile' && <Profile user={state.user} saveProfile={saveProfile} />}
@@ -1110,7 +1110,13 @@ function Requests({ state, answerJoinRequest }) {
   );
 }
 
-function Chat({ groups, activeChat, chatGroupId, setChatGroupId, sendMessage }) {
+function Chat({ groups, activeChat, chatGroupId, setChatGroupId, sendMessage, currentUser }) {
+  const isMyMessage = (msg) => {
+    if (Number(msg.uid) === Number(currentUser?.userId)) return true;
+    if (msg.email && currentUser?.email && msg.email === currentUser.email) return true;
+    return msg.name === 'Tu';
+  };
+
   return (
     <section className="view active">
       <Header title="Chat de grupos" sub="Mensajeria en tiempo real con tus companeros" />
@@ -1121,7 +1127,10 @@ function Chat({ groups, activeChat, chatGroupId, setChatGroupId, sendMessage }) 
         <div className="chat-window">
           <div className="chat-header"><div><div className="chat-header-name">{activeChat?.name || 'Selecciona un grupo'}</div><div className="chat-header-course">{activeChat ? `${activeChat.course} · ${activeChat.mode}` : '-'}</div></div>{activeChat && <div className="online-dot" />}</div>
           <div className="chat-msgs">
-            {activeChat?.msgs.length ? activeChat.msgs.map((msg, index) => <div className={`msg-group ${msg.uid === 1 ? 'mine' : 'other'}`} key={`${msg.t}-${index}`}>{msg.uid !== 1 && <div className="msg-sender">{msg.name}</div>}<div className="msg-bubble">{msg.text}</div></div>) : <Empty icon="💬" text="Se el primero en escribir algo" />}
+            {activeChat?.msgs.length ? activeChat.msgs.map((msg, index) => {
+              const mine = isMyMessage(msg);
+              return <div className={`msg-group ${mine ? 'mine' : 'other'}`} key={`${msg.t}-${index}`}>{!mine && <div className="msg-sender">{msg.name}</div>}<div className="msg-bubble">{msg.text}</div></div>;
+            }) : <Empty icon="💬" text="Se el primero en escribir algo" />}
           </div>
           <form className="chat-compose" onSubmit={sendMessage}><input className="chat-input" name="message" placeholder="Escribe un mensaje..." disabled={!activeChat} /><button className="chat-send" disabled={!activeChat}>➤</button></form>
         </div>
