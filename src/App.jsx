@@ -854,6 +854,7 @@ function Sidebar({ state, view, go, unread, logout }) {
 
 function Dashboard({ state, memberCount, isJoined, isOwner, isRequested, setJoinTarget, openGroupChat, go }) {
   const recs = state.groups.filter((group) => state.user.courses.includes(group.course) && !isJoined(group.id) && !isOwner(group.id)).slice(0, 4);
+  const joinedGroups = state.groups.filter((group) => isJoined(group.id) || isOwner(group.id)).slice(0, 4);
   return (
     <section className="view active dashboard-view">
       <div className="dashboard-hero">
@@ -868,14 +869,15 @@ function Dashboard({ state, memberCount, isJoined, isOwner, isRequested, setJoin
         </div>
         <div className="hero-media">
           <img className="hero-image" src="/assets/study-hero.png" alt="Estudiantes conectados en StudyConnect" />
-          <div className="session-popup">
-            <span className="activity-dot" />
-            <div>
-              <strong>Hoy 7:00 PM</strong>
-              <p>Calculo II - practica guiada</p>
-            </div>
-          </div>
         </div>
+      </div>
+      <div className="today-reminder">
+        <span className="activity-dot" />
+        <div>
+          <strong>Hoy 7:00 PM</strong>
+          <p>Calculo II - practica guiada</p>
+        </div>
+        <button className="section-link" onClick={() => go('chat')}>Abrir chat</button>
       </div>
       <div className="stats-grid">
         <Stat label="Grupos unidos" value={state.joined.length} sub="grupos activos" />
@@ -911,6 +913,13 @@ function Dashboard({ state, memberCount, isJoined, isOwner, isRequested, setJoin
             <p>3 grupos recomendados para ti</p>
           </div>
         </article>
+      </div>
+      <div className="section-header">
+        <span className="section-title">Tus grupos</span>
+        <button className="section-link" onClick={() => go('chat')}>Ir al chat →</button>
+      </div>
+      <div className="cards-grid dashboard-groups">
+        {joinedGroups.length ? joinedGroups.map((group) => <GroupCard key={group.id} group={group} memberCount={memberCount} joined={isJoined(group.id)} owner={isOwner(group.id)} requested={isRequested(group.id)} setJoinTarget={setJoinTarget} openGroupChat={openGroupChat} />) : <Empty icon="◎" text="Aun no estas en grupos. Explora y solicita unirte." />}
       </div>
       <div className="section-header">
         <span className="section-title">Grupos recomendados</span>
