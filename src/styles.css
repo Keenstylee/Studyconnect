@@ -3683,12 +3683,17 @@ html[data-theme="light"] .requests-panel .empty {
 
 @media (max-width: 760px) {
   .chat-view {
-    height: calc(100dvh - 68px);
+    position: fixed;
+    top: 68px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: auto;
     min-height: 0;
-    padding: 16px 14px 104px;
+    padding: 14px 14px calc(96px + env(safe-area-inset-bottom));
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     overflow: hidden;
   }
 
@@ -3700,20 +3705,22 @@ html[data-theme="light"] .requests-panel .empty {
   .chat-view .chat-layout {
     flex: 1 1 auto;
     min-height: 0;
+    height: 100%;
     display: grid;
-    grid-template-rows: auto minmax(0, 1fr);
-    gap: 12px;
+    grid-template-rows: 82px minmax(0, 1fr);
+    gap: 10px;
     overflow: hidden;
   }
 
   .chat-view .chat-sidebar {
     width: 100%;
-    min-height: 84px;
-    max-height: 92px;
+    height: 82px;
+    min-height: 82px;
+    max-height: 82px;
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: minmax(150px, 44vw);
-    gap: 10px;
+    grid-auto-columns: minmax(148px, 43vw);
+    gap: 8px;
     padding: 0 2px 4px;
     overflow-x: auto;
     overflow-y: hidden;
@@ -3721,9 +3728,10 @@ html[data-theme="light"] .requests-panel .empty {
   }
 
   .chat-view .chat-item {
+    height: 78px;
     min-height: 78px;
-    padding: 12px 14px;
-    border-radius: 16px;
+    padding: 11px 13px;
+    border-radius: 15px;
     scroll-snap-align: start;
   }
 
@@ -3746,9 +3754,10 @@ html[data-theme="light"] .requests-panel .empty {
 
   .chat-view .chat-msgs {
     min-height: 0;
-    padding: 14px 16px 12px;
+    padding: 14px 16px 14px;
     overflow-y: auto;
     overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
 
   .chat-view .msg-bubble {
@@ -3758,7 +3767,7 @@ html[data-theme="light"] .requests-panel .empty {
   .chat-view .chat-compose {
     position: relative;
     z-index: 2;
-    padding: 10px 12px 12px;
+    padding: 10px 12px;
     gap: 8px;
     background:
       linear-gradient(180deg, rgba(20,16,31,0.72), rgba(20,16,31,0.96)),
