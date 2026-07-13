@@ -1188,11 +1188,17 @@ function Requests({ state, answerJoinRequest }) {
 }
 
 function Chat({ groups, activeChat, chatGroupId, setChatGroupId, sendMessage, sendingMessage, currentUser }) {
+  const messagesEndRef = useRef(null);
+
   const isMyMessage = (msg) => {
     if (Number(msg.uid) === Number(currentUser?.userId)) return true;
     if (msg.email && currentUser?.email && msg.email === currentUser.email) return true;
     return msg.name === 'Tu';
   };
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, [chatGroupId, activeChat?.msgs?.length]);
 
   return (
     <section className="view active chat-view">
@@ -1208,6 +1214,7 @@ function Chat({ groups, activeChat, chatGroupId, setChatGroupId, sendMessage, se
               const mine = isMyMessage(msg);
               return <div className={`msg-group ${mine ? 'mine' : 'other'}`} key={`${msg.t}-${index}`}>{!mine && <div className="msg-sender">{msg.name}</div>}<div className="msg-bubble">{msg.text}</div></div>;
             }) : <Empty icon="💬" text="Se el primero en escribir algo" />}
+            <div ref={messagesEndRef} className="chat-scroll-anchor" aria-hidden="true" />
           </div>
           <form className="chat-compose" onSubmit={sendMessage}><input className="chat-input" name="message" placeholder={sendingMessage ? 'Enviando...' : 'Escribe un mensaje...'} disabled={!activeChat || sendingMessage} autoComplete="off" /><button className="chat-send" disabled={!activeChat || sendingMessage}>➤</button></form>
         </div>
