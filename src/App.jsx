@@ -1195,7 +1195,7 @@ function Chat({ groups, activeChat, chatGroupId, setChatGroupId, sendMessage, se
   };
 
   return (
-    <section className="view active">
+    <section className="view active chat-view">
       <Header title="Chat de grupos" sub="Mensajeria en tiempo real con tus companeros" />
       <div className="chat-layout">
         <div className="chat-sidebar">

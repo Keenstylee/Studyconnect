@@ -3680,3 +3680,111 @@ html[data-theme="light"] .requests-panel .empty {
     border-color: rgba(47,200,159,0.28);
   }
 }
+
+@media (max-width: 760px) {
+  .chat-view {
+    height: calc(100dvh - 68px);
+    min-height: 0;
+    padding: 16px 14px 104px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: hidden;
+  }
+
+  .chat-view .view-header {
+    margin-bottom: 0;
+    flex: 0 0 auto;
+  }
+
+  .chat-view .chat-layout {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 12px;
+    overflow: hidden;
+  }
+
+  .chat-view .chat-sidebar {
+    width: 100%;
+    min-height: 84px;
+    max-height: 92px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(150px, 44vw);
+    gap: 10px;
+    padding: 0 2px 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+  }
+
+  .chat-view .chat-item {
+    min-height: 78px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    scroll-snap-align: start;
+  }
+
+  .chat-view .chat-item:hover {
+    transform: none;
+  }
+
+  .chat-view .chat-window {
+    height: 100%;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    overflow: hidden;
+    border-radius: 20px;
+  }
+
+  .chat-view .chat-header {
+    padding: 14px 16px;
+  }
+
+  .chat-view .chat-msgs {
+    min-height: 0;
+    padding: 14px 16px 12px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .chat-view .msg-bubble {
+    max-width: min(82%, 300px);
+  }
+
+  .chat-view .chat-compose {
+    position: relative;
+    z-index: 2;
+    padding: 10px 12px 12px;
+    gap: 8px;
+    background:
+      linear-gradient(180deg, rgba(20,16,31,0.72), rgba(20,16,31,0.96)),
+      var(--bg2);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -12px 28px rgba(0,0,0,0.16);
+  }
+
+  .chat-view .chat-input {
+    min-width: 0;
+    height: 44px;
+    padding: 0 14px;
+    font-size: 12px;
+  }
+
+  .chat-view .chat-send {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    box-shadow: 0 12px 26px rgba(155,92,255,0.22);
+  }
+
+  html[data-theme="light"] .chat-view .chat-compose {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.70), rgba(255,255,255,0.96)),
+      rgba(255,255,255,0.88);
+    box-shadow: 0 -12px 28px rgba(96,64,150,0.10);
+  }
+}
