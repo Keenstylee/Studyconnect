@@ -706,6 +706,7 @@ function App() {
         {view === 'notifications' && <Notifications state={state} auth={auth} setRemoteState={setRemoteState} showToast={showToast} answerJoinRequest={answerJoinRequest} />}
         {view === 'profile' && <Profile user={state.user} saveProfile={saveProfile} />}
       </main>
+      <MobileBottomNav view={view} go={go} unread={unread} />
       {joinTarget && <JoinModal group={joinTarget} joinGroup={joinGroup} close={() => setJoinTarget(null)} />}
       <div className={`toast ${toast ? 'show' : ''}`}><span className="toast-dot" /><span>{toast}</span></div>
     </div>
@@ -868,6 +869,46 @@ function Sidebar({ state, view, go, unread, logout, theme, toggleTheme }) {
         </button>
       </div>
     </nav>
+  );
+}
+
+function MobileBottomNav({ view, go, unread }) {
+  const items = [
+    { id: 'dashboard', icon: '⌂', label: 'Inicio' },
+    { id: 'groups', icon: '◎', label: 'Grupos' },
+    { id: 'chat', icon: '◈', label: 'Chat' },
+    { id: 'profile', icon: '⚙', label: 'Perfil' },
+  ];
+
+  return (
+    <div className="mobile-bottom-nav" aria-label="Navegacion principal movil">
+      {items.slice(0, 2).map((item) => (
+        <button
+          className={`bottom-nav-item ${view === item.id ? 'active' : ''}`}
+          type="button"
+          key={item.id}
+          onClick={() => go(item.id)}
+        >
+          <span className="bottom-nav-icon">{item.icon}</span>
+          <span>{item.label}</span>
+        </button>
+      ))}
+      <button className={`bottom-nav-create ${view === 'create' ? 'active' : ''}`} type="button" onClick={() => go('create')} aria-label="Crear grupo">
+        <span>+</span>
+      </button>
+      {items.slice(2).map((item) => (
+        <button
+          className={`bottom-nav-item ${view === item.id ? 'active' : ''}`}
+          type="button"
+          key={item.id}
+          onClick={() => go(item.id)}
+        >
+          <span className="bottom-nav-icon">{item.icon}</span>
+          <span>{item.label}</span>
+          {item.id === 'chat' && unread > 0 && <span className="bottom-nav-badge">{unread}</span>}
+        </button>
+      ))}
+    </div>
   );
 }
 
