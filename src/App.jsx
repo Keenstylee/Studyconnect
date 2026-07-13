@@ -4,6 +4,7 @@ import { createSocket } from './socket.js';
 
 const STORAGE_KEY = 'studyconnect_react_state';
 const AUTH_KEY = 'studyconnect_auth_session';
+const THEME_KEY = 'studyconnect_theme';
 
 const initialState = {
   user: {
@@ -447,6 +448,11 @@ function App() {
   const [chatGroupId, setChatGroupId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [sendingMessage, setSendingMessage] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem(THEME_KEY);
+    if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme;
+    return window.matchMedia?.('(max-width: 760px)').matches ? 'light' : 'dark';
+  });
   const socketRef = useRef(null);
   const sendingMessageRef = useRef(false);
 
@@ -461,6 +467,15 @@ function App() {
   const showToast = (message) => {
     setToast(message);
     window.setTimeout(() => setToast(''), 2500);
+  };
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem(THEME_KEY, theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
   };
 
   const setRemoteState = (nextState) => {
@@ -671,8 +686,8 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <Sidebar state={state} view={view} go={go} unread={unread} logout={logout} />
+    <div className={`app theme-${theme}`}>
+      <Sidebar state={state} view={view} go={go} unread={unread} logout={logout} theme={theme} toggleTheme={toggleTheme} />
       <main className="main">
         {view === 'dashboard' && (
           <Dashboard state={state} memberCount={memberCount} isJoined={isJoined} isOwner={isOwner} isRequested={isRequested} setJoinTarget={setJoinTarget} openGroupChat={openGroupChat} go={go} />
@@ -786,7 +801,7 @@ function LoginPage({ login, register, loading }) {
   );
 }
 
-function Sidebar({ state, view, go, unread, logout }) {
+function Sidebar({ state, view, go, unread, logout, theme, toggleTheme }) {
   const sections = ['Principal', 'Actividad', 'Cuenta'];
   const [menuOpen, setMenuOpen] = useState(false);
   const goAndClose = (nextView) => {
@@ -821,6 +836,10 @@ function Sidebar({ state, view, go, unread, logout }) {
           <span />
         </button>
       </div>
+      <button className="theme-toggle" type="button" onClick={toggleTheme} aria-label={`Cambiar a tema ${theme === 'dark' ? 'claro' : 'oscuro'}`}>
+        <span className="theme-toggle-icon">{theme === 'dark' ? '☀' : '☾'}</span>
+        <span>{theme === 'dark' ? 'Tema claro' : 'Tema oscuro'}</span>
+      </button>
       <div className="nav">
         {sections.map((section) => (
           <div className="nav-section" key={section}>
