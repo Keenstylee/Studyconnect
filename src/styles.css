@@ -3314,6 +3314,8 @@ html[data-theme="light"] .requests-panel .empty {
     margin: 0;
     padding: 0;
     border-radius: 14px;
+    z-index: 330;
+    pointer-events: auto;
   }
 
   .theme-toggle span:last-child {
@@ -3409,6 +3411,7 @@ html[data-theme="light"] .requests-panel .empty {
     width: 40px;
     height: 40px;
     min-height: 40px;
+    z-index: 330;
   }
 
   .nav {
