@@ -44,9 +44,24 @@ body {
 button { font-family: var(--font); cursor: pointer; border: none; background: none; }
 input, select, textarea { font-family: var(--font); }
 a { text-decoration: none; color: inherit; }
-::-webkit-scrollbar { width: 4px; height: 4px; }
+html,
+body,
+#root,
+.app,
+.main,
+.view,
+.nav,
+.chat-list,
+.chat-msgs,
+.requests-list,
+.notifications-list {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar { width: 0; height: 0; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: transparent; border-radius: 0; }
 
 /* ═══════════════════════════════════════════════════════
    LAYOUT
@@ -1546,7 +1561,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(123,140,255,0.34);
+  background: transparent;
 }
 
 .sidebar {
