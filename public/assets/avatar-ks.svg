@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="avatar-bg" x1="16" y1="10" x2="112" y2="118" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8b5cf6"/>
+      <stop offset="0.48" stop-color="#c84be9"/>
+      <stop offset="1" stop-color="#ff3cae"/>
+    </linearGradient>
+    <radialGradient id="avatar-light" cx="30" cy="20" r="82" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="128" height="128" rx="30" fill="url(#avatar-bg)"/>
+  <rect width="128" height="128" rx="30" fill="url(#avatar-light)"/>
+  <circle cx="34" cy="30" r="20" fill="#ffffff" opacity=".16"/>
+  <circle cx="98" cy="96" r="24" fill="#ffffff" opacity=".12"/>
+  <circle cx="96" cy="34" r="11" fill="#ffffff" opacity=".14"/>
+  <path d="M30 94c15-18 53-18 68 0" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity=".20"/>
+  <text x="64" y="76" text-anchor="middle" font-family="Sora, Segoe UI, Arial, sans-serif" font-size="43" font-weight="800" fill="#ffffff">KS</text>
+</svg>

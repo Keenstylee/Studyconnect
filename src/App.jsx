@@ -863,7 +863,7 @@ function Sidebar({ state, view, go, unread, logout, theme, toggleTheme }) {
       </div>
       <div className="sidebar-user">
         <button className="user-chip" onClick={() => goAndClose('profile')}>
-          <img className="avatar avatar-img" src="/assets/avatar-ks.png" alt="" />
+          <img className="avatar avatar-img" src="/assets/avatar-ks.svg" alt="" />
           <div className="user-info">
             <div className="user-name">{state.user.name}</div>
             <div className="user-career">Ciclo {state.user.cycle}</div>
@@ -1269,7 +1269,7 @@ function Profile({ user, saveProfile }) {
   return (
     <section className="view active">
       <Header title="Mi perfil academico" sub="Manten tu informacion actualizada para mejores sugerencias" />
-      <div className="profile-header"><img className="profile-avatar profile-avatar-img" src="/assets/avatar-ks.png" alt="" /><div><div className="profile-name">{user.name}</div><div className="profile-career">{user.career} - {user.university} · Ciclo {user.cycle}</div><div className="profile-tags">{user.courses.map((course) => <span className="tag" key={course}>{course}</span>)}</div></div></div>
+      <div className="profile-header"><img className="profile-avatar profile-avatar-img" src="/assets/avatar-ks.svg" alt="" /><div><div className="profile-name">{user.name}</div><div className="profile-career">{user.career} - {user.university} · Ciclo {user.cycle}</div><div className="profile-tags">{user.courses.map((course) => <span className="tag" key={course}>{course}</span>)}</div></div></div>
       <form className="form-card" onSubmit={saveProfile}>
         <div className="form-row"><Field label="Nombre completo" name="name" defaultValue={user.name} /><Select label="Ciclo academico" name="cycle" options={['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']} defaultValue={user.cycle} /></div>
         <div className="form-row"><Field label="Carrera" name="career" defaultValue={user.career} /><Field label="Universidad" name="university" defaultValue={user.university} /></div>
