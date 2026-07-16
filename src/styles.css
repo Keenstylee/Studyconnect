@@ -3833,3 +3833,426 @@ html[data-theme="light"] .requests-panel .empty {
     box-shadow: 0 -12px 28px rgba(96,64,150,0.10);
   }
 }
+/* Auth hero: image below the value text */
+.auth-visual {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  align-items: stretch;
+  gap: 26px;
+}
+
+.auth-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 760px;
+  min-height: 0;
+}
+
+.auth-copy .auth-image {
+  display: block;
+  width: min(560px, 74%);
+  max-height: 230px;
+  object-fit: cover;
+  align-self: flex-start;
+  margin-top: 24px;
+  border-radius: 22px;
+  transform: rotate(-1deg);
+  transition: transform 260ms ease, box-shadow 260ms ease;
+}
+
+.auth-copy .auth-image:hover {
+  transform: translateY(-4px) rotate(0deg);
+}
+
+@media (min-width: 901px) {
+  .auth-copy {
+    padding-top: 36px;
+  }
+}
+
+@media (max-width: 900px) {
+  .auth-copy .auth-image,
+  .auth-image {
+    display: block;
+  }
+
+  .auth-copy .auth-image {
+    width: 100%;
+    max-height: 220px;
+    margin-top: 18px;
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .auth-copy .auth-image {
+    max-height: 180px;
+    border-radius: 18px;
+  }
+}
+
+/* StudyConnect artwork recolor: pastel purple/pink theme */
+.auth-copy .auth-image-frame {
+  position: relative;
+  width: min(560px, 74%);
+  max-height: 230px;
+  align-self: flex-start;
+  margin-top: 24px;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: linear-gradient(135deg, rgba(155,92,255,0.22), rgba(255,79,176,0.20));
+  box-shadow:
+    0 18px 48px rgba(155,92,255,0.20),
+    0 10px 34px rgba(255,79,176,0.14);
+  transform: rotate(-1deg);
+  transition: transform 260ms ease, box-shadow 260ms ease;
+}
+
+.auth-copy .auth-image-frame::after,
+.hero-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255,255,255,0.18), transparent 24%),
+    linear-gradient(135deg, rgba(155,92,255,0.42), rgba(255,79,176,0.32) 48%, rgba(45,212,191,0.18));
+  mix-blend-mode: soft-light;
+  z-index: 2;
+}
+
+.auth-copy .auth-image-frame:hover {
+  transform: translateY(-4px) rotate(0deg);
+  box-shadow:
+    0 24px 58px rgba(155,92,255,0.24),
+    0 14px 40px rgba(255,79,176,0.18);
+}
+
+.auth-copy .auth-image-frame .auth-image {
+  width: 100%;
+  max-height: 230px;
+  margin: 0;
+  display: block;
+  border: 0;
+  border-radius: inherit;
+  object-fit: cover;
+  filter: hue-rotate(92deg) saturate(1.28) brightness(1.05) contrast(1.02);
+  transform: none;
+  box-shadow: none;
+}
+
+.auth-copy .auth-image-frame .auth-image:hover {
+  transform: none;
+}
+
+.hero-media {
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.hero-image {
+  filter: hue-rotate(92deg) saturate(1.28) brightness(1.05) contrast(1.02);
+}
+
+@media (max-width: 900px) {
+  .auth-copy .auth-image-frame {
+    width: 100%;
+    max-height: 220px;
+    margin-top: 18px;
+    transform: none;
+  }
+
+  .auth-copy .auth-image-frame .auth-image {
+    max-height: 220px;
+  }
+}
+
+@media (max-width: 640px) {
+  .auth-copy .auth-image-frame {
+    max-height: 180px;
+    border-radius: 18px;
+  }
+
+  .auth-copy .auth-image-frame .auth-image {
+    max-height: 180px;
+  }
+}
+
+/* Compact auth modal on mobile and remove artwork glow */
+.auth-copy .auth-image-frame {
+  box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+}
+
+.auth-copy .auth-image-frame::after,
+.hero-media::after {
+  display: none;
+}
+
+.auth-copy .auth-image-frame .auth-image,
+.hero-image {
+  filter: saturate(1.04) brightness(1.02) contrast(1.01);
+}
+
+@media (max-width: 760px) {
+  .auth-page {
+    min-height: 100dvh;
+    padding: 14px;
+    align-items: flex-start;
+    overflow-y: auto;
+  }
+
+  .auth-card {
+    width: min(100%, 430px);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .auth-visual {
+    padding: 20px 20px 14px;
+    gap: 14px;
+  }
+
+  .auth-brand {
+    margin-bottom: 4px;
+  }
+
+  .auth-copy {
+    padding-top: 0;
+  }
+
+  .auth-copy h1 {
+    margin: 14px 0 10px;
+    font-size: clamp(26px, 7vw, 32px);
+    line-height: 1.02;
+  }
+
+  .auth-copy p {
+    max-width: 100%;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .auth-copy .auth-image-frame {
+    width: 100%;
+    max-height: 150px;
+    margin-top: 16px;
+    border-radius: 16px;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.16);
+  }
+
+  .auth-copy .auth-image-frame .auth-image {
+    max-height: 150px;
+  }
+
+  .auth-panel {
+    padding: 16px 18px 18px;
+    border-radius: 18px 18px 0 0;
+  }
+
+  .auth-tabs {
+    margin-bottom: 18px;
+  }
+
+  .auth-title {
+    font-size: 25px;
+    margin-bottom: 6px;
+  }
+
+  .auth-form {
+    gap: 12px;
+  }
+
+  .auth-field input {
+    height: 42px;
+  }
+}
+
+@media (max-width: 430px) {
+  .auth-page {
+    padding: 10px;
+  }
+
+  .auth-visual {
+    padding: 16px 16px 12px;
+  }
+
+  .auth-copy .auth-image-frame {
+    max-height: 132px;
+  }
+
+  .auth-copy .auth-image-frame .auth-image {
+    max-height: 132px;
+  }
+
+  .auth-panel {
+    padding: 14px 16px 16px;
+  }
+}
+
+/* Final auth mobile polish */
+.auth-copy .auth-image-frame {
+  background: linear-gradient(135deg, rgba(155,92,255,0.16), rgba(255,79,176,0.14));
+  box-shadow: 0 10px 22px rgba(0,0,0,0.20);
+}
+
+.auth-copy .auth-image-frame .auth-image,
+.hero-image {
+  filter: hue-rotate(92deg) saturate(1.35) brightness(1.08) contrast(1.02);
+}
+
+@media (max-width: 760px) {
+  .auth-page {
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+  }
+
+  .auth-card {
+    max-height: calc(100dvh - 28px);
+    overflow-y: auto;
+  }
+
+  .auth-copy .auth-image-frame {
+    box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+  }
+}
+
+@media (max-width: 760px) {
+  .auth-copy .auth-image-frame {
+    display: none;
+  }
+}
+
+/* Final cleanup: no glow on auth buttons, no visual effects on desktop artwork */
+.auth-panel .btn-primary,
+.auth-panel .btn-primary:hover,
+.auth-panel .btn-primary:focus,
+.auth-panel .btn-primary:active,
+.auth-panel .btn-full,
+.auth-panel .btn-full:hover,
+.auth-panel .btn-full:focus,
+.auth-panel .btn-full:active {
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+@media (min-width: 761px) {
+  .auth-copy .auth-image-frame,
+  .auth-copy .auth-image-frame:hover {
+    box-shadow: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .auth-copy .auth-image-frame::after {
+    display: none !important;
+  }
+
+  .auth-copy .auth-image-frame .auth-image,
+  .auth-copy .auth-image-frame .auth-image:hover,
+  .hero-image,
+  .hero-image:hover {
+    box-shadow: none !important;
+    transform: none !important;
+    transition: none !important;
+    filter: hue-rotate(92deg) saturate(1.35) brightness(1.08) contrast(1.02) !important;
+  }
+}
+
+/* Desktop auth layout cleanup: tighter columns, no empty middle glow */
+@media (min-width: 900px) {
+  .auth-card {
+    width: min(1180px, calc(100% - 48px)) !important;
+    grid-template-columns: minmax(0, 1fr) 390px !important;
+  }
+
+  .auth-visual {
+    min-height: 520px !important;
+    padding: 30px 34px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 26px !important;
+  }
+
+  .auth-visual::after {
+    display: none !important;
+  }
+
+  .auth-brand {
+    width: 100% !important;
+  }
+
+  .auth-copy {
+    width: min(560px, 100%) !important;
+    max-width: 560px !important;
+  }
+
+  .auth-copy h1 {
+    max-width: 560px !important;
+  }
+
+  .auth-copy p {
+    max-width: 520px !important;
+  }
+
+  .auth-copy .auth-image-frame {
+    width: min(520px, 100%) !important;
+    margin: 0 !important;
+  }
+
+  .auth-panel {
+    padding: 28px 24px !important;
+  }
+}
+
+/* Final desktop auth spacing pass */
+@media (min-width: 900px) {
+  .auth-card {
+    width: min(1060px, calc(100% - 48px)) !important;
+    grid-template-columns: minmax(0, 1fr) 370px !important;
+  }
+
+  .auth-visual {
+    padding: 28px 32px !important;
+    min-height: 500px !important;
+    gap: 22px !important;
+  }
+
+  .auth-copy,
+  .auth-copy h1 {
+    max-width: 520px !important;
+  }
+
+  .auth-copy p {
+    max-width: 500px !important;
+  }
+
+  .auth-copy .auth-image-frame {
+    width: min(500px, 100%) !important;
+    margin-top: 14px !important;
+  }
+
+  .auth-panel {
+    padding: 26px 24px !important;
+  }
+}
+
+/* Center the auth divider with equal desktop columns */
+@media (min-width: 900px) {
+  .auth-card {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .auth-panel {
+    align-items: center !important;
+  }
+
+  .auth-panel > * {
+    width: min(100%, 360px) !important;
+  }
+}

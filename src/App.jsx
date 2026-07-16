@@ -761,8 +761,10 @@ function LoginPage({ login, register, loading }) {
             <span className="hero-kicker">Plataforma academica</span>
             <h1>Conecta con grupos de estudio compatibles.</h1>
             <p>Explora cursos, recibe sugerencias, unete a equipos y conversa con tus companeros desde un solo lugar.</p>
+            <div className="auth-image-frame">
+              <img className="auth-image" src="/assets/study-hero.png" alt="Vista visual de StudyConnect" />
+            </div>
           </div>
-          <img className="auth-image" src="/assets/study-hero.png" alt="Vista visual de StudyConnect" />
         </section>
 
         <section className="auth-panel">
